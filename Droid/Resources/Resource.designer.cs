@@ -26,6 +26,7 @@ namespace ccmobileapppoc.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::Gcm.Client.Resource.String.library_name = global::ccmobileapppoc.Droid.Resource.String.library_name;
 			global::Microsoft.WindowsAzure.Mobile.Files.Resource.String.ApplicationName = global::ccmobileapppoc.Droid.Resource.String.ApplicationName;
 			global::Microsoft.WindowsAzure.Mobile.Files.Resource.String.Hello = global::ccmobileapppoc.Droid.Resource.String.Hello;
 			global::PCLStorage.Resource.String.ApplicationName = global::ccmobileapppoc.Droid.Resource.String.ApplicationName;
@@ -3976,6 +3977,9 @@ namespace ccmobileapppoc.Droid
 			
 			// aapt resource value: 0x7f05001d
 			public const int appbar_scrolling_view_behavior = 2131034141;
+			
+			// aapt resource value: 0x7f050020
+			public const int library_name = 2131034144;
 			
 			// aapt resource value: 0x7f050000
 			public const int mr_media_route_button_content_description = 2131034112;

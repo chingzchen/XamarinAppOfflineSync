@@ -156,6 +156,10 @@
       <HintPath>..\packages\Xamarin.Android.Support.v7.MediaRouter.23.0.1.3\lib\MonoAndroid403\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.Azure.NotificationHubs.Android, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Azure.NotificationHubs.Android.0.4.0\lib\MonoAndroid403\Xamarin.Azure.NotificationHubs.Android.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Forms.2.0.1.6495\lib\MonoAndroid10\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
@@ -185,6 +189,7 @@
   <ItemGroup>
     <Compile Include="DroidPlatform.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="MyBroadcastReceiver.cs" />
     <Compile Include="NotificationSrv.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

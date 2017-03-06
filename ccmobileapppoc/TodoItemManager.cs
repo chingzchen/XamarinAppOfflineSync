@@ -5,7 +5,7 @@
  *
  * For more information, see: http://go.microsoft.com/fwlink/?LinkId=620342
  */
-//#define OFFLINE_SYNC_ENABLED
+#define OFFLINE_SYNC_ENABLED
 
 using System;
 using System.Collections.Generic;
@@ -135,6 +135,10 @@ namespace ccmobileapppoc
                 {
                     syncErrors = exc.PushResult.Errors;
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"Exception: {0}", ex.Message);
             }
 
             // Simple error/conflict handling. A real application would handle the various errors like network conditions,

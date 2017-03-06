@@ -64,26 +64,39 @@ namespace ccmobileapppoc
         public async void OnSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var todo = e.SelectedItem as TodoItem;
-            if (Device.OS != TargetPlatform.iOS && todo != null)
+
+            if (todo != null)
             {
-                // Not iOS - the swipe-to-delete is discoverable there
-                if (Device.OS == TargetPlatform.Android)
-                {
-                    await DisplayAlert(todo.Name, "Press-and-hold to complete task " + todo.Name, "Got it!");
-                }
-                else
-                {
-                    // Windows, not all platforms support the Context Actions yet
-                    if (await DisplayAlert("Mark completed?", "Do you wish to complete " + todo.Name + "?", "Complete", "Cancel"))
-                    {
-                        await CompleteItem(todo);
-                    }
-                }
+                var detailsView = new TodoItemDetailsView(todo, manager);
+                await detailsView.LoadImagesAsync();
+                await Navigation.PushAsync(detailsView);
             }
 
-            // prevents background getting highlighted
             todoList.SelectedItem = null;
         }
+        //public async void OnSelected(object sender, SelectedItemChangedEventArgs e)
+        //{
+        //    var todo = e.SelectedItem as TodoItem;
+        //    if (Device.OS != TargetPlatform.iOS && todo != null)
+        //    {
+        //        // Not iOS - the swipe-to-delete is discoverable there
+        //        if (Device.OS == TargetPlatform.Android)
+        //        {
+        //            await DisplayAlert(todo.Name, "Press-and-hold to complete task " + todo.Name, "Got it!");
+        //        }
+        //        else
+        //        {
+        //            // Windows, not all platforms support the Context Actions yet
+        //            if (await DisplayAlert("Mark completed?", "Do you wish to complete " + todo.Name + "?", "Complete", "Cancel"))
+        //            {
+        //                await CompleteItem(todo);
+        //            }
+        //        }
+        //    }
+
+        //    // prevents background getting highlighted
+        //    todoList.SelectedItem = null;
+        //}
 
         // http://developer.xamarin.com/guides/cross-platform/xamarin-forms/working-with/listview/#context
         public async void OnComplete(object sender, EventArgs e)

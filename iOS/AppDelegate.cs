@@ -15,9 +15,10 @@ namespace ccmobileapppoc.iOS
 		{
 			// Initialize Azure Mobile Apps
 			Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+            //cc:add
 
-			// Initialize Xamarin Forms
-			global::Xamarin.Forms.Forms.Init ();
+            // Initialize Xamarin Forms
+            global::Xamarin.Forms.Forms.Init ();
 
 			LoadApplication (new App ());
 

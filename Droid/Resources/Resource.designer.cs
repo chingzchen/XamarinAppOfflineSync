@@ -26,6 +26,10 @@ namespace ccmobileapppoc.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::Microsoft.WindowsAzure.Mobile.Files.Resource.String.ApplicationName = global::ccmobileapppoc.Droid.Resource.String.ApplicationName;
+			global::Microsoft.WindowsAzure.Mobile.Files.Resource.String.Hello = global::ccmobileapppoc.Droid.Resource.String.Hello;
+			global::PCLStorage.Resource.String.ApplicationName = global::ccmobileapppoc.Droid.Resource.String.ApplicationName;
+			global::PCLStorage.Resource.String.Hello = global::ccmobileapppoc.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_in = global::ccmobileapppoc.Droid.Resource.Animation.abc_fade_in;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_out = global::ccmobileapppoc.Droid.Resource.Animation.abc_fade_out;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_grow_fade_in_from_bottom = global::ccmobileapppoc.Droid.Resource.Animation.abc_grow_fade_in_from_bottom;

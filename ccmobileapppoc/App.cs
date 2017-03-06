@@ -6,13 +6,16 @@ namespace ccmobileapppoc
 {
 	public class App : Application
 	{
-		public App ()
+        public static object UIContext { get; set; }
+        public App ()
 		{
-			// The root page of your application
-			MainPage = new TodoList();
-		}
+            // The root page of your application
+            //MainPage = new TodoList();
+            MainPage = new NavigationPage(new TodoList());
 
-		protected override void OnStart ()
+        }      
+
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}

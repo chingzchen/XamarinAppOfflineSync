@@ -21,6 +21,12 @@ using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 #endif
 
+using System.IO;
+using Xamarin.Forms;
+using Microsoft.WindowsAzure.MobileServices.Files;
+using Microsoft.WindowsAzure.MobileServices.Files.Sync;
+using Microsoft.WindowsAzure.MobileServices.Eventing;
+
 namespace ccmobileapppoc
 {
     public partial class TodoItemManager
@@ -39,13 +45,20 @@ namespace ccmobileapppoc
         private TodoItemManager()
         {
             this.client = new MobileServiceClient(Constants.ApplicationURL);
+           
+
 
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore(offlineDbPath);
             store.DefineTable<TodoItem>();
 
+            // Initialize file sync
+            this.client.InitializeFileSyncContext(new TodoItemFileSyncHandler(this), store);
+
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
-            this.client.SyncContext.InitializeAsync(store);
+            //this.client.SyncContext.InitializeAsync(store);
+            this.client.SyncContext.InitializeAsync(store, StoreTrackingOptions.NotifyLocalAndServerOperations);
+
 
             this.todoTable = client.GetSyncTable<TodoItem>();
 #else
@@ -123,6 +136,9 @@ namespace ccmobileapppoc
             {
                 await this.client.SyncContext.PushAsync();
 
+                //add file push async
+                await this.todoTable.PushFileChangesAsync();
+
                 await this.todoTable.PullAsync(
                     //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
                     //Use a different query name for each unique query in your program
@@ -161,6 +177,31 @@ namespace ccmobileapppoc
                     Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
                 }
             }
+        }
+
+        internal async Task DownloadFileAsync(MobileServiceFile file)
+        {
+            var todoItem = await todoTable.LookupAsync(file.ParentId);
+            IPlatform platform = DependencyService.Get<IPlatform>();
+
+            string filePath = await FileHelper.GetLocalFilePathAsync(file.ParentId, file.Name);
+            await platform.DownloadFileAsync(this.todoTable, file, filePath);
+        }
+
+        internal async Task<MobileServiceFile> AddImage(TodoItem todoItem, string imagePath)
+        {
+            string targetPath = await FileHelper.CopyTodoItemFileAsync(todoItem.Id, imagePath);
+            return await this.todoTable.AddFileAsync(todoItem, Path.GetFileName(targetPath));
+        }
+
+        internal async Task DeleteImage(TodoItem todoItem, MobileServiceFile file)
+        {
+            await this.todoTable.DeleteFileAsync(file);
+        }
+
+        internal async Task<IEnumerable<MobileServiceFile>> GetImageFilesAsync(TodoItem todoItem)
+        {
+            return await this.todoTable.GetFilesAsync(todoItem);
         }
 #endif
     }

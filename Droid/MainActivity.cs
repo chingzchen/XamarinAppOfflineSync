@@ -27,8 +27,11 @@ namespace ccmobileapppoc.Droid
 			// Initialize Xamarin Forms
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 
-			// Load the main application
-			LoadApplication (new App ());
+            //cc: add            
+            App.UIContext = this;
+
+            // Load the main application
+            LoadApplication (new App ());
 		}
 	}
 }

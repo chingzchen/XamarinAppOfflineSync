@@ -62,7 +62,7 @@ namespace ccmobileapppoc.Droid
             Hub = new NotificationHub(Constants.NotificationHubName, Constants.ListenConnectionString,
                                         context);
             try
-            {
+            {               
                 Hub.UnregisterAll(registrationId);
             }
             catch (Exception ex)

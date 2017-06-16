@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ccmobileapppoc
 {
-    public class TodoItemImage : INotifyPropertyChanged
+    public class VideoItemImage : INotifyPropertyChanged
     {
         private string name;
         private string uri;
@@ -35,7 +35,7 @@ namespace ccmobileapppoc
             }
         }
 
-        public TodoItemImage(MobileServiceFile file, TodoItem todoItem)
+        public VideoItemImage(MobileServiceFile file, VideoItem todoItem)
         {
             Name = file.Name;
             File = file;

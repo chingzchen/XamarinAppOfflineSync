@@ -11,7 +11,7 @@ namespace ccmobileapppoc
 {
     public class FileHelper
     {
-        public static async Task<string> CopyTodoItemFileAsync(string itemId, string filePath)
+        public static async Task<string> CopyVideoItemFileAsync(string itemId, string filePath)
         {
             IFolder localStorage = FileSystem.Current.LocalStorage;
 
@@ -31,6 +31,12 @@ namespace ccmobileapppoc
             return targetPath;
         }
 
+        /// <summary>
+        /// Get Local File Path for file sync
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static async Task<string> GetLocalFilePathAsync(string itemId, string fileName)
         {
             IPlatform platform = DependencyService.Get<IPlatform>();
@@ -46,6 +52,11 @@ namespace ccmobileapppoc
             return Path.Combine(recordFilesPath, fileName);
         }
 
+        /// <summary>
+        /// Delete local file after sync complete
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static async Task DeleteLocalFileAsync(Microsoft.WindowsAzure.MobileServices.Files.MobileServiceFile fileName)
         {
             string localPath = await GetLocalFilePathAsync(fileName.ParentId, fileName.Name);

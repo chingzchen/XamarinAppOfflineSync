@@ -4,15 +4,15 @@ using Xamarin.Forms;
 
 namespace ccmobileapppoc
 {
-    public partial class TodoList : ContentPage
+    public partial class VideoList : ContentPage
     {
-        TodoItemManager manager;
+        VideoItemManager manager;
 
-        public TodoList()
+        public VideoList()
         {
             InitializeComponent();
 
-            manager = TodoItemManager.DefaultManager;
+            manager = VideoItemManager.DefaultManager;
 
             // OnPlatform<T> doesn't currently support the "Windows" target platform, so we have this check here.
             if (manager.IsOfflineEnabled &&
@@ -38,22 +38,22 @@ namespace ccmobileapppoc
         }
 
         // Data methods
-        async Task AddItem(TodoItem item)
+        async Task AddItem(VideoItem item)
         {
             await manager.SaveTaskAsync(item);
-            todoList.ItemsSource = await manager.GetTodoItemsAsync();
+            todoList.ItemsSource = await manager.GetVideoItemsAsync();
         }
 
-        async Task CompleteItem(TodoItem item)
+        async Task CompleteItem(VideoItem item)
         {
             item.Done = true;
             await manager.SaveTaskAsync(item);
-            todoList.ItemsSource = await manager.GetTodoItemsAsync();
+            todoList.ItemsSource = await manager.GetVideoItemsAsync();
         }
 
         public async void OnAdd(object sender, EventArgs e)
         {
-            var todo = new TodoItem { Name = newItemName.Text };
+            var todo = new VideoItem { Name = newItemName.Text };
             await AddItem(todo);
 
             newItemName.Text = string.Empty;
@@ -63,11 +63,11 @@ namespace ccmobileapppoc
         // Event handlers
         public async void OnSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var todo = e.SelectedItem as TodoItem;
+            var todo = e.SelectedItem as VideoItem;
 
             if (todo != null)
             {
-                var detailsView = new TodoItemDetailsView(todo, manager);
+                var detailsView = new VideoItemDetailsView(todo, manager);
                 await detailsView.LoadImagesAsync();
                 await Navigation.PushAsync(detailsView);
             }
@@ -76,7 +76,7 @@ namespace ccmobileapppoc
         }
         //public async void OnSelected(object sender, SelectedItemChangedEventArgs e)
         //{
-        //    var todo = e.SelectedItem as TodoItem;
+        //    var todo = e.SelectedItem as videoItem;
         //    if (Device.OS != TargetPlatform.iOS && todo != null)
         //    {
         //        // Not iOS - the swipe-to-delete is discoverable there
@@ -102,7 +102,7 @@ namespace ccmobileapppoc
         public async void OnComplete(object sender, EventArgs e)
         {
             var mi = ((MenuItem)sender);
-            var todo = mi.CommandParameter as TodoItem;
+            var todo = mi.CommandParameter as VideoItem;
             await CompleteItem(todo);
         }
 
@@ -139,7 +139,7 @@ namespace ccmobileapppoc
         {
             using (var scope = new ActivityIndicatorScope(syncIndicator, showActivityIndicator))
             {
-                todoList.ItemsSource = await manager.GetTodoItemsAsync(syncItems);
+                todoList.ItemsSource = await manager.GetVideoItemsAsync(syncItems);
             }
         }
 

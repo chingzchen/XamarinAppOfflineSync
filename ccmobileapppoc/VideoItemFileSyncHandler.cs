@@ -11,21 +11,32 @@ using Xamarin.Forms;
 
 namespace ccmobileapppoc
 {
-    public class TodoItemFileSyncHandler : IFileSyncHandler
+    public class VideoItemFileSyncHandler : IFileSyncHandler
     {
-        private readonly TodoItemManager todoItemManager;
+        private readonly VideoItemManager todoItemManager;
 
-        public TodoItemFileSyncHandler(TodoItemManager itemManager)
+        public VideoItemFileSyncHandler(VideoItemManager itemManager)
         {
             this.todoItemManager = itemManager;
         }
 
+        /// <summary>
+        /// Get the Sata Soruce
+        /// </summary>
+        /// <param name="metadata"></param>
+        /// <returns></returns>
         public Task<IMobileServiceFileDataSource> GetDataSource(MobileServiceFileMetadata metadata)
         {
             IPlatform platform = DependencyService.Get<IPlatform>();
             return platform.GetFileDataSource(metadata);
         }
 
+        /// <summary>
+        /// File Sync
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public async Task ProcessFileSynchronizationAction(MobileServiceFile file, FileSynchronizationAction action)
         {
             if (action == FileSynchronizationAction.Delete)
@@ -33,7 +44,8 @@ namespace ccmobileapppoc
                 await FileHelper.DeleteLocalFileAsync(file);
             }
             else
-            { // Create or update. We're aggressively downloading all files.
+            { 
+                // downloading all files.
                 await this.todoItemManager.DownloadFileAsync(file);
             }
         }

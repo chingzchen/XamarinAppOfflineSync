@@ -36,28 +36,27 @@ namespace ccmobileapppoc.Droid
     public class MyBroadcastReceiver : GcmBroadcastReceiverBase<PushHandlerService>
     {
         public static string[] SENDER_IDS = new string[] { Constants.SenderID };
-
-        public const string TAG = "MyBroadcastReceiver-GCM";
     }
 
     [Service] // Must use the service tag
     public class PushHandlerService : GcmServiceBase
     {
+        public static string keystrformat = "{0}={1}";
         public static string RegistrationID { get; private set; }
         private NotificationHub Hub { get; set; }
 
         public PushHandlerService() : base(Constants.SenderID)
         {
-            Log.Info(MyBroadcastReceiver.TAG, "PushHandlerService() constructor");
+            Log.Info(Constants.TAG, AppResource.PushSrvConstruct);
         }
 
         protected override void OnRegistered(Context context, string registrationId)
         {
-            Log.Verbose(MyBroadcastReceiver.TAG, "GCM Registered: " + registrationId);
+            Log.Verbose(Constants.TAG, AppResource.ResisterTitle + registrationId);
             RegistrationID = registrationId;
 
-            createNotification("PushHandlerService-GCM Registered...",
-                                "The device has been Registered!");
+            createNotification(AppResource.ResisterTitle,
+                                AppResource.RegisterDesp);
 
             Hub = new NotificationHub(Constants.NotificationHubName, Constants.ListenConnectionString,
                                         context);
@@ -67,10 +66,9 @@ namespace ccmobileapppoc.Droid
             }
             catch (Exception ex)
             {
-                Log.Error(MyBroadcastReceiver.TAG, ex.Message);
+                Log.Error(Constants.TAG, ex.Message);
             }
-
-            //var tags = new List<string>() { "falcons" }; // create tags if you want
+            // add tags if any
             var tags = new List<string>() { };
 
             try
@@ -79,32 +77,38 @@ namespace ccmobileapppoc.Droid
             }
             catch (Exception ex)
             {
-                Log.Error(MyBroadcastReceiver.TAG, ex.Message);
+                Log.Error(Constants.TAG, ex.Message);
             }
         }
 
         protected override void OnMessage(Context context, Intent intent)
         {
-            Log.Info(MyBroadcastReceiver.TAG, "GCM Message Received!");
+            Log.Info(Constants.TAG, AppResource.MsgReceived);
 
             var msg = new StringBuilder();
 
             if (intent != null && intent.Extras != null)
             {
                 foreach (var key in intent.Extras.KeySet())
-                    msg.AppendLine(key + "=" + intent.Extras.Get(key).ToString());
+                    msg.AppendLine(string.Format(keystrformat ,key,intent.Extras.Get(key).ToString()));
             }
 
-            string messageText = intent.Extras.GetString("message");
+            string messageText = intent.Extras.GetString(AppResource.MsgReceived);
             if (!string.IsNullOrEmpty(messageText))
             {
-                createNotification("New hub message!", messageText);
+                createNotification(AppResource.NewHubMsg, messageText);
             }
             else
             {
-                createNotification("Unknown message details", msg.ToString());
+                createNotification(AppResource.UnknownMsg, msg.ToString());
             }
         }
+
+        /// <summary>
+        ///Create Notification 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="desc"></param>
         void createNotification(string title, string desc)
         {
             //Create notification
@@ -120,8 +124,6 @@ namespace ccmobileapppoc.Droid
             notification.Flags = NotificationFlags.AutoCancel;
 
             //Set the notification info
-            //we use the pending intent, passing our ui intent over, which will get called
-            //when the notification is tapped.
             notification.SetLatestEventInfo(this, title, desc, PendingIntent.GetActivity(this, 0, uiIntent, 0));
 
             //Show the notification
@@ -146,21 +148,21 @@ namespace ccmobileapppoc.Droid
 
         protected override void OnUnRegistered(Context context, string registrationId)
         {
-            Log.Verbose(MyBroadcastReceiver.TAG, "GCM Unregistered: " + registrationId);
+            Log.Verbose(Constants.TAG, "GCM Unregistered: " + registrationId);
 
             createNotification("GCM Unregistered...", "The device has been unregistered!");
         }
 
         protected override bool OnRecoverableError(Context context, string errorId)
         {
-            Log.Warn(MyBroadcastReceiver.TAG, "Recoverable Error: " + errorId);
+            Log.Warn(Constants.TAG, "Recoverable Error: " + errorId);
 
             return base.OnRecoverableError(context, errorId);
         }
 
         protected override void OnError(Context context, string errorId)
         {
-            Log.Error(MyBroadcastReceiver.TAG, "GCM Error: " + errorId);
+            Log.Error(Constants.TAG, "GCM Error: " + errorId);
         }
     }
 }

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ccmobileapppoc
 {
-	public class TodoItem
+	public class VideoItem
 	{
 		string id;
 		string name;

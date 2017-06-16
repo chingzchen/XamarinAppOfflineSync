@@ -29,20 +29,20 @@ using Microsoft.WindowsAzure.MobileServices.Eventing;
 
 namespace ccmobileapppoc
 {
-    public partial class TodoItemManager
+    public partial class VideoItemManager
     {
-        static TodoItemManager defaultInstance = new TodoItemManager();
+        static VideoItemManager defaultInstance = new VideoItemManager();
         MobileServiceClient client;
 
 #if OFFLINE_SYNC_ENABLED
-        IMobileServiceSyncTable<TodoItem> todoTable;
+        IMobileServiceSyncTable<VideoItem> videoITemTable;
 #else
         IMobileServiceTable<TodoItem> todoTable;
 #endif
 
-        const string offlineDbPath = @"localstore.db";
+        const string offlineDbPath = @"localstudyrecord.db";
 
-        private TodoItemManager()
+        private VideoItemManager()
         {
             this.client = new MobileServiceClient(Constants.ApplicationURL);
            
@@ -50,23 +50,23 @@ namespace ccmobileapppoc
 
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore(offlineDbPath);
-            store.DefineTable<TodoItem>();
+            store.DefineTable<VideoItem>();
 
             // Initialize file sync
-            this.client.InitializeFileSyncContext(new TodoItemFileSyncHandler(this), store);
+            this.client.InitializeFileSyncContext(new VideoItemFileSyncHandler(this), store);
 
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
             //this.client.SyncContext.InitializeAsync(store);
             this.client.SyncContext.InitializeAsync(store, StoreTrackingOptions.NotifyLocalAndServerOperations);
 
 
-            this.todoTable = client.GetSyncTable<TodoItem>();
+            this.videoITemTable = client.GetSyncTable<VideoItem>();
 #else
             this.todoTable = client.GetTable<TodoItem>();
 #endif
         }
 
-        public static TodoItemManager DefaultManager
+        public static VideoItemManager DefaultManager
         {
             get
             {
@@ -85,10 +85,10 @@ namespace ccmobileapppoc
 
         public bool IsOfflineEnabled
         {
-            get { return todoTable is Microsoft.WindowsAzure.MobileServices.Sync.IMobileServiceSyncTable<TodoItem>; }
+            get { return videoITemTable is Microsoft.WindowsAzure.MobileServices.Sync.IMobileServiceSyncTable<VideoItem>; }
         }
 
-        public async Task<ObservableCollection<TodoItem>> GetTodoItemsAsync(bool syncItems = false)
+        public async Task<ObservableCollection<VideoItem>> GetVideoItemsAsync(bool syncItems = false)
         {
             try
             {
@@ -98,11 +98,11 @@ namespace ccmobileapppoc
                     await this.SyncAsync();
                 }
 #endif
-                IEnumerable<TodoItem> items = await todoTable
-                    .Where(todoItem => !todoItem.Done)
+                IEnumerable<VideoItem> items = await videoITemTable
+                    .Where(videoItem => !videoItem.Done)
                     .ToEnumerableAsync();
 
-                return new ObservableCollection<TodoItem>(items);
+                return new ObservableCollection<VideoItem>(items);
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
@@ -115,15 +115,15 @@ namespace ccmobileapppoc
             return null;
         }
 
-        public async Task SaveTaskAsync(TodoItem item)
+        public async Task SaveTaskAsync(VideoItem item)
         {
             if (item.Id == null)
             {
-                await todoTable.InsertAsync(item);
+                await videoITemTable.InsertAsync(item);
             }
             else
             {
-                await todoTable.UpdateAsync(item);
+                await videoITemTable.UpdateAsync(item);
             }
         }
 
@@ -137,13 +137,11 @@ namespace ccmobileapppoc
                 await this.client.SyncContext.PushAsync();
 
                 //add file push async
-                await this.todoTable.PushFileChangesAsync();
+                await this.videoITemTable.PushFileChangesAsync();
 
-                await this.todoTable.PullAsync(
-                    //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
-                    //Use a different query name for each unique query in your program
-                    "allTodoItems",
-                    this.todoTable.CreateQuery());
+                await this.videoITemTable.PullAsync(
+                    "allVideoItems",
+                    this.videoITemTable.CreateQuery());
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -156,21 +154,17 @@ namespace ccmobileapppoc
             {
                 Debug.WriteLine(@"Exception: {0}", ex.Message);
             }
-
-            // Simple error/conflict handling. A real application would handle the various errors like network conditions,
-            // server conflicts and others via the IMobileServiceSyncHandler.
             if (syncErrors != null)
             {
                 foreach (var error in syncErrors)
                 {
                     if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
                     {
-                        //Update failed, reverting to server's copy.
                         await error.CancelAndUpdateItemAsync(error.Result);
                     }
                     else
                     {
-                        // Discard local change.
+                        // Discard the change
                         await error.CancelAndDiscardItemAsync();
                     }
 
@@ -181,27 +175,27 @@ namespace ccmobileapppoc
 
         internal async Task DownloadFileAsync(MobileServiceFile file)
         {
-            var todoItem = await todoTable.LookupAsync(file.ParentId);
+            var todoItem = await videoITemTable.LookupAsync(file.ParentId);
             IPlatform platform = DependencyService.Get<IPlatform>();
 
             string filePath = await FileHelper.GetLocalFilePathAsync(file.ParentId, file.Name);
-            await platform.DownloadFileAsync(this.todoTable, file, filePath);
+            await platform.DownloadFileAsync(this.videoITemTable, file, filePath);
         }
 
-        internal async Task<MobileServiceFile> AddImage(TodoItem todoItem, string imagePath)
+        internal async Task<MobileServiceFile> AddImage(VideoItem todoItem, string imagePath)
         {
-            string targetPath = await FileHelper.CopyTodoItemFileAsync(todoItem.Id, imagePath);
-            return await this.todoTable.AddFileAsync(todoItem, Path.GetFileName(targetPath));
+            string targetPath = await FileHelper.CopyVideoItemFileAsync(todoItem.Id, imagePath);
+            return await this.videoITemTable.AddFileAsync(todoItem, Path.GetFileName(targetPath));
         }
 
-        internal async Task DeleteImage(TodoItem todoItem, MobileServiceFile file)
+        internal async Task DeleteImage(VideoItem todoItem, MobileServiceFile file)
         {
-            await this.todoTable.DeleteFileAsync(file);
+            await this.videoITemTable.DeleteFileAsync(file);
         }
 
-        internal async Task<IEnumerable<MobileServiceFile>> GetImageFilesAsync(TodoItem todoItem)
+        internal async Task<IEnumerable<MobileServiceFile>> GetImageFilesAsync(VideoItem todoItem)
         {
-            return await this.todoTable.GetFilesAsync(todoItem);
+            return await this.videoITemTable.GetFilesAsync(todoItem);
         }
 #endif
     }

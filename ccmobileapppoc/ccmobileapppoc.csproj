@@ -35,17 +35,22 @@
     <Compile Include="IPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="TodoItemDetailsView.xaml.cs">
-      <DependentUpon>TodoItemDetailsView.xaml</DependentUpon>
+    <Compile Include="AppResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="TodoItemFileSyncHandler.cs" />
-    <Compile Include="TodoItemImage.cs" />
-    <Compile Include="TodoList.xaml.cs">
-      <DependentUpon>TodoList.xaml</DependentUpon>
+    <Compile Include="VideoItemDetailsView.xaml.cs">
+      <DependentUpon>VideoItemDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VideoItemFileSyncHandler.cs" />
+    <Compile Include="VideoItemImage.cs" />
+    <Compile Include="VideoList.xaml.cs">
+      <DependentUpon>VideoList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
-    <Compile Include="TodoItem.cs" />
-    <Compile Include="TodoItemManager.cs" />
+    <Compile Include="VideoItem.cs" />
+    <Compile Include="VideoItemManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.2.6359\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.2.6359\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -115,12 +120,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TodoList.xaml">
+    <EmbeddedResource Include="AppResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VideoList.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TodoItemDetailsView.xaml">
+    <EmbeddedResource Include="VideoItemDetailsView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

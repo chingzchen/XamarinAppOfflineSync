@@ -11,7 +11,7 @@ namespace ccmobileapppoc
 		{
             // The root page of your application
             //MainPage = new TodoList();
-            MainPage = new NavigationPage(new TodoList());
+            MainPage = new NavigationPage(new VideoList());
 
         }      
 
